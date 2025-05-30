@@ -19,14 +19,13 @@ def get_gradient_descent(
     return dJ_dw, dJ_db
 
 
-def linear_regression(X: np.array, y: np.array, lr: float, lambda_: float):
-    num_iters = 100
-
+def linear_regression(
+    X: np.array, y: np.array, lr: float, lambda_: float, num_epochs: int
+) -> tuple[np.array, float]:
     w = np.random.rand(X.shape[1])
-    b = 0.5
-    lambda_ = 0.7
+    b = np.random.rand()
 
-    for _ in range(num_iters):
+    for _ in range(num_epochs):
         cost = get_cost(X, y, w, b, lambda_)
         print(cost)
 
@@ -42,6 +41,7 @@ if __name__ == "__main__":
     y = np.array([1, 2, 3]).T
     lr = 0.01
     lambda_ = 0.7
+    num_epochs = 100
 
-    w, b = linear_regression(X, y, lr, lambda_)
+    w, b = linear_regression(X, y, lr, lambda_, num_epochs)
     print(w, b)
