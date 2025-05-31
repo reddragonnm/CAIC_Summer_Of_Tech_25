@@ -15,6 +15,7 @@ So, let's get started with learning first of all... Read and Digest the followin
 Each request sent from the client's side results in a response from the server which has a few components:
 
 **Status Line:**
+
 - **HTTP Version:** Indicates the HTTP version used, e.g., HTTP/1.1, HTTP/2
 - **Status Code:** A three-digit code indicating the result of the request:
   - 200: OK (Success)
@@ -24,11 +25,13 @@ Each request sent from the client's side results in a response from the server w
 - **Reason Phrase:** A brief description of the status code, e.g., OK, Not Found, Internal Server Error
 
 **Headers:**
+
 - Contain metadata about the request/response
 - Include information like content type, authentication tokens, caching instructions
 - [Mozilla's HTTP Headers Documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers)
 
 **Body:**
+
 - Contains the actual data requested by the client
 - Can be in various formats:
   - **JSON:** Most commonly used in mobile APIs for structured data
@@ -37,6 +40,7 @@ Each request sent from the client's side results in a response from the server w
   - **XML:** Another format for structured data
 
 **Optional Components:**
+
 - **Cookies:** Data sent by the server to be stored on the client-side
 - [CloudFlare's HTTP Cookies Guide](https://www.cloudflare.com/learning/privacy/what-are-cookies/)
 
@@ -45,6 +49,7 @@ Each request sent from the client's side results in a response from the server w
 **Browser Developer Tools**
 
 Master Chrome DevTools:
+
 - Elements tab for HTML/CSS inspection
 - Console tab for JavaScript debugging
 - Network tab for monitoring API requests
@@ -53,6 +58,7 @@ Master Chrome DevTools:
 - Resource: [Inspect Network Activity - Chrome DevTools 101](https://developer.chrome.com/docs/devtools/network/)
 
 **API Testing Tools:**
+
 - **Postman:** Industry-standard tool for testing APIs
 - [Learn Postman in 15 Minutes :)](https://www.youtube.com/watch?v=VywxIQ2ZXw4)
 
@@ -127,6 +133,7 @@ npm start
 #### Task 2A: Modern JavaScript Fundamentals
 
 Master these essential JavaScript concepts that you'll use daily:
+
 - **ES6+ Features:** Arrow functions, destructuring, template literals, async/await
 - **Promises and Async Programming:** Understanding asynchronous operations
 - **Array Methods:** map(), filter(), reduce(), forEach()
@@ -134,6 +141,7 @@ Master these essential JavaScript concepts that you'll use daily:
 - **Module Import/Export:** ES6 modules for organizing code
 
 **Learning Resources:**
+
 - [JavaScript.info - Modern JavaScript Tutorial](https://javascript.info/)
 - [MDN JavaScript Guide](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide)
 
@@ -148,10 +156,10 @@ Master these essential JavaScript concepts that you'll use daily:
 
 ```javascript
 // Example API call
-fetch('https://jsonplaceholder.typicode.com/posts')
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error('Error:', error));
+fetch("https://jsonplaceholder.typicode.com/posts")
+  .then((response) => response.json())
+  .then((data) => console.log(data))
+  .catch((error) => console.error("Error:", error));
 ```
 
 ### Task 3: React Fundamentals
@@ -185,19 +193,22 @@ Learn these fundamental React concepts:
 ## Extra Resources and Documentation
 
 ### JavaScript and Web Development
+
 - [MDN Web Docs](https://developer.mozilla.org/) - Comprehensive web development reference
 - [JavaScript.info](https://javascript.info/) - Modern JavaScript tutorial
 
 ## Testing/Troubleshooting Your Setup
 
 ### Verification Checklist
-- [ ] Node.js and npm installed and working
-- [ ] Basic React setup done.
-- [ ] Postman installed and tested with a public API
-- [ ] Chrome DevTools explored and understood
-- [ ] Basic JavaScript concepts practiced
+
+- [x] Node.js and npm installed and working
+- [x] Basic React setup done.
+- [x] Postman installed and tested with a public API
+- [x] Chrome DevTools explored and understood
+- [x] Basic JavaScript concepts practiced
 
 ### Simple Test Project
+
 Create a simple "Hello World" React app that displays a welcome message.
 This would confirm that your test environment is working properly :)
 
