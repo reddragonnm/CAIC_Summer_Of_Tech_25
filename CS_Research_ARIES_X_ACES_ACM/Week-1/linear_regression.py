@@ -5,35 +5,46 @@ def get_cost(X: np.array, y: np.array, w: np.array, lambda_: float) -> float:
     # cost with L1 regularization
 
     m = len(y)
-    return np.sum((X @ w - y) ** 2) / (2 * m) + (lambda_ * np.sum(np.abs(w)))
+    mse_term = np.sum((X @ w - y) ** 2) / (2 * m)  # mean squared error term
+
+    # L1 regularization term
+    w = np.copy(w)  # avoid modifying the original weights
+    w[0] = 0  # do not regularize the bias term ("bias trick")
+    reg_term = lambda_ * np.sum(np.abs(w))
+
+    return mse_term + reg_term
 
 
-def get_gradient_descent(
+def get_gradient(
     X: np.array, y: np.array, w: np.array, lambda_: float
 ) -> tuple[np.array, float]:
+    # gradient descent with L1 regularization
+
     m = len(y)
     y_pred = X @ w
     err = y_pred - y
 
+    mse_term = (X.T @ err) / m  # mean squared error gradient
+
     reg_term = lambda_ * np.sign(w)  # L1 regularization term
-    reg_term[0] = 0  # Do not regularize the bias term ("bias trick")
+    reg_term[0] = 0  # do not regularize the bias term ("bias trick")
 
     # calculate gradients for L1 regularization
-    dJ_dw = (X.T @ err) / m + reg_term  # matrix multiplication magic
-    return dJ_dw
+    return mse_term + reg_term  # matrix multiplication magic
 
 
 def linear_regression(
     X: np.array, y: np.array, lr: float, lambda_: float, num_epochs: int
 ) -> tuple[np.array, float]:
+    # train linear regression model
+
     w = np.random.rand(X.shape[1])
 
     for _ in range(num_epochs):
         cost = get_cost(X, y, w, lambda_)
         print(cost)
 
-        dJ_dw = get_gradient_descent(X, y, w, lambda_)
-        w -= lr * dJ_dw
+        w -= lr * get_gradient(X, y, w, lambda_)
 
     return w
 
