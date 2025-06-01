@@ -15,9 +15,7 @@ def get_cost(X: np.array, y: np.array, w: np.array, lambda_: float) -> float:
     return mse_term + reg_term
 
 
-def get_gradient(
-    X: np.array, y: np.array, w: np.array, lambda_: float
-) -> tuple[np.array, float]:
+def get_gradient(X: np.array, y: np.array, w: np.array, lambda_: float) -> np.array:
     # gradient descent with L1 regularization
 
     m = len(y)
@@ -33,14 +31,12 @@ def get_gradient(
     return mse_term + reg_term  # matrix multiplication magic
 
 
-def linear_regression(
-    X: np.array, y: np.array, lr: float, lambda_: float, num_epochs: int
-) -> tuple[np.array, float]:
+def linear_regression(X: np.array, y: np.array, lr: float, lambda_: float) -> np.array:
     # train linear regression model
 
     w = np.random.rand(X.shape[1])
 
-    for _ in range(num_epochs):
+    for _ in range(100):
         cost = get_cost(X, y, w, lambda_)
         print(cost)
 
@@ -58,7 +54,7 @@ if __name__ == "__main__":
     X_ = np.hstack((np.ones((X.shape[0], 1)), X))  # add bias term (intercept)
 
     # Train the model
-    w = linear_regression(X_, y, lr=0.01, lambda_=0.01, num_epochs=200)
+    w = linear_regression(X_, y, lr=0.01, lambda_=0.01)
 
     # Predict values
     y_pred = X_ @ w
