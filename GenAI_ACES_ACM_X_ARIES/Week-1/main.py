@@ -4,7 +4,7 @@ import os
 from google import genai
 from google.genai import types
 
-load_dotenv()
+load_dotenv()  # load environment variables from .env file
 
 
 def run_chat_agent():
@@ -17,27 +17,21 @@ def run_chat_agent():
 
         chat_history.append({"speaker": "User", "text": user_input})
 
-        if user_input.lower() in ["exit", "quit"]:
+        if user_input.lower() in ["exit", "quit"]:  # quit the chat agent
             print("Gemini: Goodbye!")
             break
 
-        print("Gemini:", end=" ")
-
-        response = client.models.generate_content_stream(
-            model="gemini-1.5-flash",
-            contents=[f"{hist['speaker']}: {hist['text']}" for hist in chat_history]
-            + [f"User: {user_input}"],
+        # generate response using Gemini model
+        response = client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=[f"{hist['speaker']}: {hist['text']}" for hist in chat_history],
             config=types.GenerateContentConfig(
                 system_instruction="You are a helpful AI chat assistant provided with the context of the conversation.",
             ),
         )
 
-        response_text = ""
-
-        for chunk in response:
-            response_text += chunk.text
-            print(chunk.text, end="")
-
+        response_text = response.text.lstrip("Gemini: ").strip()
+        print("Gemini:", response_text)
         chat_history.append({"speaker": "Gemini", "text": response_text})
 
 
