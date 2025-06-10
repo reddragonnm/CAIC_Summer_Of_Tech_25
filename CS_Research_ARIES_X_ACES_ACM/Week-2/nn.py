@@ -26,6 +26,16 @@ def relu_dash(x):
     return int(x > 0)
 
 
+def softmax(x):
+    exp_x = np.exp(x - np.max(x))  # for numerical stability
+    return exp_x / exp_x.sum(axis=0, keepdims=True)
+
+
+def softmax_dash(x):
+    s = softmax(x)
+    return s * (1 - s)
+
+
 class Layer:
     def __init__(
         self, inp_size, out_size, activation=linear, activation_dash=linear_dash
@@ -70,26 +80,62 @@ def mse_loss(y_true, y_pred):
     return np.mean((y_true - y_pred) ** 2)
 
 
+def cross_entropy_loss(y_true, y_pred):
+    eps = 1e-12
+    y_pred = np.clip(y_pred, eps, 1.0 - eps)
+    return -np.sum(y_true * np.log(y_pred))
+
+
 if __name__ == "__main__":
+    # model = [
+    #     Layer(2, 3, activation=sigmoid, activation_dash=sigmoid_dash),
+    #     Layer(3, 1, activation=linear, activation_dash=linear_dash),
+    # ]
+
+    # x = np.array([1, 2])
+    # y = np.array([3])
+
+    # y_pred = predict(model, x)
+
+    # for _ in range(100):
+    #     y_pred = predict(model, x)
+    #     loss = mse_loss(y, y_pred)
+
+    #     gradient = 2 * (y_pred - y) / len(y)
+
+    #     for layer in reversed(model):
+    #         gradient = layer.backprop(gradient, lr=0.01)
+
+    #     print(loss)
+
+    # print(y_pred)
+
+    import pandas as pd
+
+    df = pd.read_csv("./train.csv")
+
     model = [
-        Layer(2, 3, activation=sigmoid, activation_dash=sigmoid_dash),
-        Layer(3, 1, activation=linear, activation_dash=linear_dash),
+        Layer(784, 128, activation=sigmoid, activation_dash=sigmoid_dash),
+        Layer(128, 64, activation=sigmoid, activation_dash=sigmoid_dash),
+        Layer(64, 10, activation=softmax, activation_dash=softmax_dash),
     ]
 
-    x = np.array([1, 2])
-    y = np.array([3])
+    y = df["label"]
+    X = df.drop(columns=["label"]).values / 255.0
 
-    y_pred = predict(model, x)
+    y = pd.get_dummies(y).astype(int).values
 
-    for _ in range(100):
-        y_pred = predict(model, x)
-        loss = mse_loss(y, y_pred)
+    for epoch in range(1000):
+        for i in range(len(X)):
+            x = X[i]
+            y_true = y[i]
 
-        gradient = 2 * (y_pred - y) / len(y)
+            y_pred = predict(model, x)
 
-        for layer in reversed(model):
-            gradient = layer.backprop(gradient, lr=0.01)
+            loss = cross_entropy_loss(y_true, y_pred)
 
-        print(loss)
+            gradient = y_pred - y_true
+            for layer in reversed(model):
+                gradient = layer.backprop(gradient, lr=0.01)
 
-    print(y_pred)
+        print(f"Epoch {epoch + 1}, Loss: {loss:.4f}")
