@@ -32,8 +32,8 @@ if __name__ == "__main__":
     model = SimpleNN(input_size, hidden_size, output_size)
 
     criterion = nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
-    num_epochs = 100
+    optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
+    num_epochs = 1000
 
     for epoch in range(num_epochs):
         optimizer.zero_grad()
