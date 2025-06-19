@@ -1,21 +1,12 @@
-import axios from "axios";
-import { useState, useEffect } from "react";
-
-import Register from "./Register";
+import { useState } from "react";
 
 function App() {
-  useEffect(() => {
-    axios.get("http://localhost:3000/").then((response) => {
-      console.log("Response from server:", response.data);
-    });
-  }, []);
+  const [count, setCount] = useState(0);
 
   return (
-    <div>
-      <h1>Basic User Auth Test</h1>
-
-      <Register />
-    </div>
+    <>
+      <h1>Hello world</h1>
+    </>
   );
 }
 
