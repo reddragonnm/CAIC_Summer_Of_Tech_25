@@ -25,9 +25,7 @@ async function createUser(username, name, email, password) {
 
 async function validateUser(username, password) {
   const user = await User.findOne({ username });
-  const isPasswordValid = await bcrypt.compare(password, user.password);
-
-  return user && isPasswordValid;
+  return user && (await bcrypt.compare(password, user.password));
 }
 
 function generateJWT(username) {
@@ -64,49 +62,50 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.post("/change-password", authenticateJWT, async (req, res) => {
-  const { username } = req.payload;
-  const { oldPassword, newPassword } = req.body;
+// router.post("/change-password", authenticateJWT, async (req, res) => {
+//   const { username } = req.payload;
+//   const { oldPassword, newPassword } = req.body;
 
-  // verify old password
-  if (!validateUser(username, oldPassword)) {
-    return res.status(400).json({ message: "Invalid username or password" });
-  }
+//   // verify old password
+//   if (!validateUser(username, oldPassword)) {
+//     return res.status(400).json({ message: "Invalid username or password" });
+//   }
 
-  // TODO: validate new password strength using joi
+//   // TODO: validate new password strength using joi
 
-  const hashedPassword = await bcrypt.hash(newPassword, numSalts);
-  user.password = hashedPassword;
-  await user.save();
+//   const hashedPassword = await bcrypt.hash(newPassword, numSalts);
+//   const user = await User.findOne({ username });
+//   user.password = hashedPassword;
+//   await user.save();
 
-  res.status(200).json({ message: "Password changed successfully" });
-});
+//   res.status(200).json({ message: "Password changed successfully" });
+// });
 
-router.post("/delete-account", authenticateJWT, async (req, res) => {
-  const { username } = req.payload;
+// router.post("/delete-account", authenticateJWT, async (req, res) => {
+//   const { username } = req.payload;
 
-  // verify user exists
-  const user = await User.findOne({ username });
-  if (!user) {
-    return res.status(404).json({ message: "User not found" });
-  }
+//   // verify user exists
+//   const user = await User.findOne({ username });
+//   if (!user) {
+//     return res.status(404).json({ message: "User not found" });
+//   }
 
-  // delete user
-  await User.deleteOne({ username });
-  res.status(200).json({ message: "Account deleted successfully" });
-});
+//   // delete user
+//   await User.deleteOne({ username });
+//   res.status(200).json({ message: "Account deleted successfully" });
+// });
 
 router.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
-  // verify old password
-  if (!validateUser(username, password)) {
+  // verify password
+  if (!(await validateUser(username, password))) {
     return res.status(400).json({ message: "Invalid username or password" });
   }
 
   res
     .status(200)
-    .json({ message: "Login successful", token: generateJWT(user.username) });
+    .json({ message: "Login successful", token: generateJWT(username) });
 });
 
 router.get("/profile", authenticateJWT, async (req, res) => {
